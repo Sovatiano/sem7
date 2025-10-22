@@ -75,13 +75,17 @@ def draw_buttons():
                 (move_car_button.x + move_car_button.width * 0.2, move_car_button.y + move_car_button.height * 0.15))
 
 
-car = Car(100, 430, DARK_RED, WIDTH, screen, CAR_SPEED)
 moving_trajectory = 'right'
+up_down_trajectory = 'up'
 
 clock = pygame.time.Clock()
 running = True
 
+cur_height = HEIGHT * 0.78
+car = Car(WIDTH * 0.1, cur_height, DARK_RED, WIDTH, screen, CAR_SPEED)
+
 while running:
+    # print(cur_height)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -92,7 +96,7 @@ while running:
             # if backward_button.collidepoint(mouse_pos):
             #     backward_pressed = True
             if draw_car_button.collidepoint(mouse_pos):
-                car = Car(WIDTH * 0.1, HEIGHT * 0.78, DARK_RED, WIDTH, screen, CAR_SPEED)
+                car = Car(WIDTH * 0.1, cur_height, DARK_RED, WIDTH, screen, CAR_SPEED)
                 moving_trajectory = 'right'
                 draw_pressed = True
             if move_car_button.collidepoint(mouse_pos):
@@ -115,11 +119,22 @@ while running:
         car.flip()
 
     if moving_trajectory == 'right' and move_pressed:
-        car.y = HEIGHT * 0.78
+        # car.y = HEIGHT * 0.78
         car.move_right()
     elif moving_trajectory == 'left' and move_pressed:
-        car.y = HEIGHT * 0.59
+        # car.y = HEIGHT * 0.59
         car.move_left()
+
+    car.y = cur_height
+    if move_pressed:
+        if up_down_trajectory == 'up':
+            cur_height -= CAR_SPEED
+        else:
+            cur_height += CAR_SPEED
+    if cur_height <= HEIGHT * 0.6:
+        up_down_trajectory = 'down'
+    if cur_height >= HEIGHT * 0.9:
+        up_down_trajectory = 'up'
 
     screen.fill(BLUE)
     draw_clouds()
