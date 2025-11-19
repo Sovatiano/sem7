@@ -2,7 +2,7 @@ import pygame.draw
 
 
 class Car:
-    def __init__(self, x, y, main_color, screen_width, surface, speed):
+    def __init__(self, x, y, main_color, screen_width, surface):
         self.x = x
         self.y = y
         self.main_color = main_color
@@ -12,7 +12,7 @@ class Car:
         self.height = 50
         self.surface = pygame.Surface((self.width, self.height * 1.3), pygame.SRCALPHA)
         self.sub_surface = pygame.Surface((self.width * 1.1, self.height * 1.3), pygame.SRCALPHA)
-        self.speed = speed
+        self.speed = 5
         self.direction = 1
         self.COLORS = {
             "CAR_COLOR": main_color,

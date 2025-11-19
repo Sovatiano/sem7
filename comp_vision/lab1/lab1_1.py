@@ -18,8 +18,8 @@ while x is None:
     except ValueError:
         print("Недопустимое значение")
     else:
-        if not(x > 5 and m.sin(x) != 0 and x != cot(x) and m.sin(x + 5) > 0):
-            print("Значение не входит в ОДЗ (x > 5; sin(x) != 0; x != cot(x)); sin(x+5) > 0")
+        if not(x > 5 and m.sin(x) != 0 and x != cot(x)):
+            print("Значение не входит в ОДЗ (x > 5; sin(x) != 0; x != cot(x))")
             x = None
 
-print(f"Значение функции в точке {x}: {fun(x):.3f}")
+print(f"{fun(x):.3f}")

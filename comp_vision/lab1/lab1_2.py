@@ -1,3 +1,5 @@
+import math as m
+
 b = None
 while b is None:
     try:
@@ -5,8 +7,8 @@ while b is None:
     except ValueError:
         print("Недопустимое значение")
     else:
-        if not(b < 1):
-            print("Значение не входит в ОДЗ (b < 1)")
+        if not(b <= m.log(4, 5)):
+            print(f"Значение не входит в ОДЗ (b <= {m.log(4, 5):.3f})")
             b = None
 
 
@@ -32,7 +34,9 @@ matrix, matrix_string, max_string_ind = fill_matrix()
 for _ in matrix:
     print(_)
 print("="*30)
-print(matrix_string, max_string_ind)
+print("Строка с наибольшим элементом главной диагонали:")
+print(matrix_string)
+print(f"Номер строки: {max_string_ind}")
 
 with open("result.txt", 'w') as f:
     f.write("Матрица:\n")

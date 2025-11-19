@@ -22,22 +22,19 @@ CLOUDS = [
     [600, 60, 100, 35],
     [200, 150, 130, 45]
 ]
-ROAD_Y = HEIGHT * 0.6
-ROAD_HEIGHT = HEIGHT * 0.4
+ROAD_Y = HEIGHT * 0.75
+ROAD_HEIGHT = HEIGHT * 0.25
 
 BUTTON_WIDTH = WIDTH * 0.17
 BUTTON_HEIGHT = HEIGHT * 0.05
 
-CAR_SPEED = 10
-
-# forward_button = pygame.Rect(WIDTH * 0.75, HEIGHT * 0.4, BUTTON_WIDTH, BUTTON_HEIGHT)
-# backward_button = pygame.Rect(WIDTH * 0.1, HEIGHT * 0.4, BUTTON_WIDTH, BUTTON_HEIGHT)
+forward_button = pygame.Rect(WIDTH * 0.75, HEIGHT * 0.4, BUTTON_WIDTH, BUTTON_HEIGHT)
+backward_button = pygame.Rect(WIDTH * 0.1, HEIGHT * 0.4, BUTTON_WIDTH, BUTTON_HEIGHT)
 draw_car_button = pygame.Rect(WIDTH * 0.75, HEIGHT * 0.9, BUTTON_WIDTH, BUTTON_HEIGHT)
-move_car_button = pygame.Rect(WIDTH * 0.10, HEIGHT * 0.9, BUTTON_WIDTH, BUTTON_HEIGHT)
 forward_pressed = False
 backward_pressed = False
 draw_pressed = False
-move_pressed = False
+
 
 
 def draw_clouds():
@@ -50,42 +47,30 @@ def draw_clouds():
 def draw_road():
     pygame.draw.rect(screen, GRAY, (0, ROAD_Y, WIDTH, ROAD_HEIGHT))
     for i in range(0, WIDTH, 60):
-        pygame.draw.rect(screen, YELLOW, (i, ROAD_Y + ROAD_HEIGHT * 0.4 - 2, 30, 4))
-
+        pygame.draw.rect(screen, YELLOW, (i, ROAD_Y + ROAD_HEIGHT // 2 - 2, 30, 4))
 
 def draw_buttons():
     font = pygame.font.SysFont(None, int((WIDTH + HEIGHT) / 50))
-    # forward_text = font.render("Вперёд", True, BUTTON_TEXT_COLOR)
-    # backward_text = font.render("Назад", True, BUTTON_TEXT_COLOR)
+    forward_text = font.render("Вперёд", True, BUTTON_TEXT_COLOR)
+    backward_text = font.render("Назад", True, BUTTON_TEXT_COLOR)
     draw_text = font.render("Нарисовать", True, BUTTON_TEXT_COLOR)
-    move_text = font.render("Двигать", True, BUTTON_TEXT_COLOR)
 
     pygame.draw.rect(screen, BUTTON_COLOR, draw_car_button)
-    pygame.draw.rect(screen, BUTTON_COLOR, move_car_button)
     # pygame.draw.rect(screen, BUTTON_COLOR, forward_button)
     # pygame.draw.rect(screen, BUTTON_COLOR, backward_button)
 
-    # screen.blit(forward_text, (forward_button.x + forward_button.width * 0.2,forward_button.y +
-    # forward_button.height * 0.15))
-    # screen.blit(backward_text, (backward_button.x + backward_button.width * 0.25,backward_button.y +
-    # backward_button.height * 0.15))
-    screen.blit(draw_text,
-                (draw_car_button.x + draw_car_button.width * 0.1, draw_car_button.y + draw_car_button.height * 0.15))
-    screen.blit(move_text,
-                (move_car_button.x + move_car_button.width * 0.2, move_car_button.y + move_car_button.height * 0.15))
+    # screen.blit(forward_text, (forward_button.x + forward_button.width * 0.2,forward_button.y + forward_button.height * 0.15))
+    # screen.blit(backward_text, (backward_button.x + backward_button.width * 0.25,backward_button.y + backward_button.height * 0.15))
+    screen.blit(draw_text, (draw_car_button.x + draw_car_button.width * 0.1, draw_car_button.y + draw_car_button.height * 0.15))
 
 
+car = Car(100, 430, DARK_RED, WIDTH, screen)
 moving_trajectory = 'right'
-up_down_trajectory = 'up'
 
 clock = pygame.time.Clock()
 running = True
 
-cur_height = HEIGHT * 0.78
-car = Car(WIDTH * 0.1, cur_height, DARK_RED, WIDTH, screen, CAR_SPEED)
-
 while running:
-    # print(cur_height)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -96,20 +81,19 @@ while running:
             # if backward_button.collidepoint(mouse_pos):
             #     backward_pressed = True
             if draw_car_button.collidepoint(mouse_pos):
-                car = Car(WIDTH * 0.1, cur_height, DARK_RED, WIDTH, screen, CAR_SPEED)
+                car = Car(100, 430, DARK_RED, WIDTH, screen)
                 moving_trajectory = 'right'
                 draw_pressed = True
-            if move_car_button.collidepoint(mouse_pos):
-                move_pressed = not move_pressed
 
         elif event.type == pygame.MOUSEBUTTONUP:
             forward_pressed = False
             backward_pressed = False
 
-    # if forward_pressed:
-    #     car.move_right()
-    # if backward_pressed:
-    #     car.move_left()
+    if forward_pressed:
+        car.move_right()
+    if backward_pressed:
+        car.move_left()
+
 
     if car.x == WIDTH - car.width * 1.05:
         moving_trajectory = 'left'
@@ -118,23 +102,10 @@ while running:
         moving_trajectory = 'right'
         car.flip()
 
-    if moving_trajectory == 'right' and move_pressed:
-        # car.y = HEIGHT * 0.78
+    if moving_trajectory == 'right':
         car.move_right()
-    elif moving_trajectory == 'left' and move_pressed:
-        # car.y = HEIGHT * 0.59
+    else:
         car.move_left()
-
-    car.y = cur_height
-    if move_pressed:
-        if up_down_trajectory == 'up':
-            cur_height -= CAR_SPEED
-        else:
-            cur_height += CAR_SPEED
-    if cur_height <= HEIGHT * 0.6:
-        up_down_trajectory = 'down'
-    if cur_height >= HEIGHT * 0.9:
-        up_down_trajectory = 'up'
 
     screen.fill(BLUE)
     draw_clouds()
@@ -145,7 +116,7 @@ while running:
         car.draw()
 
     pygame.display.flip()
-    clock.tick(30)
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()

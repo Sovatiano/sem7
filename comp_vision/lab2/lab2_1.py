@@ -26,14 +26,12 @@ def count_v(x):
 def plot_function():
     x_values = []
     y_values = []
-    v_values = []
 
     x = l_border
     while x <= r_border:
         y = P(x)
         x_values.append(x)
         y_values.append(y)
-        v_values.append(count_v(x))
         x += h
 
     plt.figure(figsize=(10, 6))
@@ -47,16 +45,6 @@ def plot_function():
     plt.tight_layout()
     plt.show()
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(x_values, v_values, 'b-', linewidth=2, marker='o', markersize=4)
-    plt.title('График функции P(v)')
-    plt.xlabel('v')
-    plt.ylabel('P(v)')
-    plt.grid(True, alpha=0.3)
-    plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
-    plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
-    plt.tight_layout()
-    plt.show()
 
 def create_table():
     table_window = tk.Tk()
